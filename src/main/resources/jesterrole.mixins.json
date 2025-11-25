@@ -1,0 +1,27 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "net.sylviameows.jesterrole.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "MGameFunctions",
+    "MGameRoundEndComponent",
+    "MLockpickItem",
+    "MPlayerMoodAccessor",
+    "MPlayerMoodComponent",
+    "MRoleAnnouncementText",
+    "MSmallDoorBlock",
+    "MTrainDoorBlock"
+  ],
+  "client": [
+    "client.MMoodRenderer",
+    "client.MRoundTextRenderer",
+    "client.MTMMClient",
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "overwrites": {
+    "requireAnnotations": true
+  }
+}

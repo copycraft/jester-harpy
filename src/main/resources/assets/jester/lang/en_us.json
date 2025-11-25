@@ -1,0 +1,10 @@
+{
+  "announcement.role.jester": "Jester!",
+  "announcement.title.jester": "Jester",
+  "announcement.goal.jester": "Act suspicious to get eliminated by a vigilante.",
+  "announcement.goals.jester": "Act suspicious to get eliminated by a vigilante.",
+  "announcement.win.jester": "Jester wins!",
+  "game.win.jester": "They successfully tricked the innocents!",
+  "tip.lockpick.killer_only": "Only killers can jam doors.",
+  "tip.lockpick.not_sane": "You're not sane enough to pick this lock."
+}

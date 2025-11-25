@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "id": "jesterrole",
+  "version": "${version}",
+  "name": "Jester Role Addon",
+  "description": "",
+  "authors": [],
+  "contact": {},
+  "license": "All-Rights-Reserved",
+  "icon": "assets/jester/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "client": [
+      "net.sylviameows.jesterrole.Jester"
+    ],
+    "main": [
+      "net.sylviameows.jesterrole.Jester"
+    ]
+  },
+  "mixins": [
+    "jesterrole.mixins.json"
+  ],
+  "depends": {
+    "trainmurdermystery": ">=${tmm_version}",
+    "fabricloader": ">=${loader_version}",
+    "fabric": "*",
+    "minecraft": "${minecraft_version}"
+  }
+}
