@@ -6,7 +6,9 @@ import dev.doctor4t.trainmurdermystery.game.GameFunctions;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
+import net.minecraft.world.World;
 import net.sylviameows.jesterrole.Jester;
+import org.jetbrains.annotations.Nullable;
 import org.ladysnake.cca.api.v3.component.sync.AutoSyncedComponent;
 import org.ladysnake.cca.api.v3.component.tick.ClientTickingComponent;
 import org.ladysnake.cca.api.v3.component.tick.ServerTickingComponent;
@@ -28,19 +30,23 @@ public abstract class MGameFunctions implements AutoSyncedComponent, ServerTicki
             method = "killPlayer(Lnet/minecraft/entity/player/PlayerEntity;ZLnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/util/Identifier;)V",
             at = @At(value = "HEAD")
     )
-    private static void jesterDeath(PlayerEntity victim, boolean spawnBody, PlayerEntity killer, Identifier identifier, CallbackInfo ci) {
+    private static void jesterDeath(PlayerEntity victim, boolean spawnBody, @Nullable PlayerEntity killer, Identifier identifier, CallbackInfo ci) {
         if (killer == null) return;
 
-        ServerWorld world = (ServerWorld) victim.getWorld();
+        World world = victim.getWorld();
         GameWorldComponent game = GameWorldComponent.KEY.get(world);
-        if (game.isRole(victim, Jester.ROLE) && game.isInnocent(killer)) {
+        if (world instanceof ServerWorld serverWorld) {
+            // only run on server
+            if (game.isRole(victim, Jester.ROLE) && game.isInnocent(killer)) {
 
-            game.setLooseEndWinner(victim.getUuid());
-            GameRoundEndComponent.KEY.get(world).setRoundEndData(world.getPlayers(), GameFunctions.WinStatus.LOOSE_END);
+                game.setLooseEndWinner(victim.getUuid());
+                GameRoundEndComponent.KEY.get(world).setRoundEndData(serverWorld.getPlayers(), GameFunctions.WinStatus.LOOSE_END);
 
-            Jester.setJesterWin(true, world.getPlayers());
-            GameFunctions.stopGame(world);
+                Jester.setJesterWin(true, serverWorld.getPlayers());
+                GameFunctions.stopGame(serverWorld);
+            }
         }
+
     }
 
 }
