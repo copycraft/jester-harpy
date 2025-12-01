@@ -14,7 +14,6 @@ import net.fabricmc.loader.api.Version;
 import net.fabricmc.loader.api.VersionParsingException;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketByteBuf;
-import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Formatting;
@@ -23,7 +22,6 @@ import net.minecraft.world.World;
 import net.sylviameows.jesterrole.commands.RoleChanceCommand;
 import net.sylviameows.jesterrole.mixin.MPlayerMoodAccessor;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -41,6 +39,7 @@ public class Jester implements ModInitializer {
     public static final Identifier CHANNEL = id("verify");
 
     public static final List<UUID> forcedJesters = new ArrayList<>();
+    public static RoleAnnouncementTexts.RoleAnnouncementText TEXT = new JesterAnnouncementText();
 
     public static @NotNull Identifier id(String name) {
         return Identifier.of(MOD_ID, name);
@@ -56,13 +55,15 @@ public class Jester implements ModInitializer {
             GameConstants.getInTicks(0, 10),
             false
     );
-    public static RoleAnnouncementTexts.RoleAnnouncementText TEXT = new JesterAnnouncementText();
+
 
     @Override
     public void onInitialize() {
         LOGGER.info("Attempting role injection.");
+
         TMMRoles.registerRole(ROLE);
-        RoleAnnouncementTexts.registerRoleAnnouncementText(TEXT);
+        RoleAnnouncementTexts.registerRoleAnnouncementText(Jester.TEXT);
+
 
         ServerLoginConnectionEvents.QUERY_START.register(((handler, server, sender, synchronizer) -> {
             ServerLoginNetworking.registerReceiver(handler, CHANNEL, (_server, _handler, understood, buf, _synchronizer, responder) -> {

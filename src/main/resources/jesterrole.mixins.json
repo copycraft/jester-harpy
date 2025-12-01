@@ -11,12 +11,12 @@
     "MMurderGameMode",
     "MPlayerMoodAccessor",
     "MPlayerMoodComponent",
-    "MRoleAnnouncementText",
     "MSmallDoorBlock",
-    "MTrainDoorBlock",
-    "client.ServerListAccessor"
+    "MTrainDoorBlock"
   ],
   "client": [
+    "client.MRoleAnnouncementText",
+    "client.ServerListAccessor",
     "client.MMoodRenderer",
     "client.MMultiplayerScreen",
     "client.MRoundTextRenderer",

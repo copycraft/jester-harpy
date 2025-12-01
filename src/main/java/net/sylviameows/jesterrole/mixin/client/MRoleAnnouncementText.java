@@ -1,4 +1,4 @@
-package net.sylviameows.jesterrole.mixin;
+package net.sylviameows.jesterrole.mixin.client;
 
 import dev.doctor4t.trainmurdermystery.client.gui.RoleAnnouncementTexts;
 import dev.doctor4t.trainmurdermystery.game.GameFunctions;

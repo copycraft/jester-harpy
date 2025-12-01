@@ -2,15 +2,15 @@ package net.sylviameows.jesterrole.cca;
 
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.RegistryWrapper;
+import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
-import net.sylviameows.jesterrole.Jester;
 import org.ladysnake.cca.api.v3.component.ComponentKey;
 import org.ladysnake.cca.api.v3.component.ComponentRegistry;
 import org.ladysnake.cca.api.v3.component.sync.AutoSyncedComponent;
 
 public class JesterWorldComponent implements AutoSyncedComponent {
     public static final ComponentKey<JesterWorldComponent> KEY =
-            ComponentRegistry.getOrCreate(Jester.id("world"), JesterWorldComponent.class);
+            ComponentRegistry.getOrCreate(Identifier.of("jester", "world"), JesterWorldComponent.class);
     private final World world;
 
 
