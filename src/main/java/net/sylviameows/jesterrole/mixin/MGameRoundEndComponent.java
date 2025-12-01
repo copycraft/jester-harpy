@@ -5,8 +5,12 @@ import dev.doctor4t.trainmurdermystery.cca.GameRoundEndComponent;
 import dev.doctor4t.trainmurdermystery.cca.GameWorldComponent;
 import dev.doctor4t.trainmurdermystery.client.gui.RoleAnnouncementTexts;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.world.World;
 import net.sylviameows.jesterrole.Jester;
+import net.sylviameows.jesterrole.cca.JesterWorldComponent;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
@@ -16,6 +20,10 @@ import java.util.UUID;
 
 @Mixin(GameRoundEndComponent.class)
 public class MGameRoundEndComponent {
+
+    @Shadow
+    @Final
+    private World world;
 
     @ModifyArg(
             method = "setRoundEndData",
@@ -35,7 +43,9 @@ public class MGameRoundEndComponent {
     )
     private void jester$didWin(UUID uuid, CallbackInfoReturnable<Boolean> cir, @Local(name = "detail") GameRoundEndComponent.RoundEndData detail) {
         if (detail.role().equals(Jester.TEXT)) {
-            if (Jester.isJesterWin()) {
+            JesterWorldComponent component = JesterWorldComponent.KEY.get(world);
+
+            if (component.isJesterWin()) {
                 cir.setReturnValue(true);
             } else {
                 cir.setReturnValue(false);

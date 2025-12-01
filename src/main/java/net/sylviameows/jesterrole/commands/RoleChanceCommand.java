@@ -6,6 +6,7 @@ import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.Text;
 import net.sylviameows.jesterrole.Jester;
+import net.sylviameows.jesterrole.cca.JesterWorldComponent;
 import org.jetbrains.annotations.NotNull;
 
 import java.text.NumberFormat;
@@ -25,9 +26,13 @@ public class RoleChanceCommand {
     }
 
     private static int setChance(Double chance, ServerCommandSource source) {
-        Jester.CHANCE = chance;
+        JesterWorldComponent component = JesterWorldComponent.KEY.get(source.getWorld());
+        component.setChance(chance);
+
+        // feedback
         Text percent = Text.literal(NumberFormat.getPercentInstance().format(chance)).withColor(Jester.ROLE_COLOR);
         source.sendMessage(Text.translatable("command.jester.rolechance.set", percent));
+
         return 1;
     }
 }

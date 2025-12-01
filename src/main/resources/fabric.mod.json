@@ -4,7 +4,9 @@
   "version": "${version}",
   "name": "Jester Role Addon",
   "description": "",
-  "authors": [],
+  "authors": [
+    "sylviameows"
+  ],
   "contact": {},
   "license": "All-Rights-Reserved",
   "icon": "assets/jester/icon.png",
@@ -15,11 +17,19 @@
     ],
     "main": [
       "net.sylviameows.jesterrole.Jester"
+    ],
+    "cardinal-components": [
+      "net.sylviameows.jesterrole.cca.JesterComponents"
     ]
   },
   "mixins": [
     "jesterrole.mixins.json"
   ],
+  "custom": {
+    "cardinal-components": [
+      "jester:world"
+    ]
+  },
   "depends": {
     "trainmurdermystery": ">=${tmm_version}",
     "fabricloader": ">=${loader_version}",

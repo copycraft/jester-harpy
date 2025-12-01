@@ -19,17 +19,12 @@ public class JesterClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-        ClientPlayNetworking.registerGlobalReceiver(JesterWinPayload.ID, new JesterWinPayload.Receiver());
-
         ClientLoginConnectionEvents.INIT.register((handler, server) -> {
             // jester win always false unless told otherwise by server.
-            Jester.setJesterWin(false, null);
         });
 
         ClientLoginConnectionEvents.QUERY_START.register((ClientLoginNetworkHandler handler, MinecraftClient client) -> {
             ClientLoginNetworking.registerReceiver(Jester.CHANNEL, (_client, _handler, buf, callbacksConsumer) -> {
-                boolean jesterWin = buf.readBoolean();
-                Jester.setJesterWin(jesterWin, null);
 
                 PacketByteBuf out = PacketByteBufs.create();
                 var mod = FabricLoader.getInstance().getModContainer(Jester.MOD_ID);

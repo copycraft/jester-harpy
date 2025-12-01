@@ -4,12 +4,15 @@ import com.llamalad7.mixinextras.sugar.Local;
 import dev.doctor4t.trainmurdermystery.cca.GameRoundEndComponent;
 import dev.doctor4t.trainmurdermystery.client.gui.RoleAnnouncementTexts;
 import dev.doctor4t.trainmurdermystery.client.gui.RoundTextRenderer;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
+import net.minecraft.world.World;
 import net.sylviameows.jesterrole.Jester;
+import net.sylviameows.jesterrole.cca.JesterWorldComponent;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -27,9 +30,14 @@ public class MRoundTextRenderer {
             name = "winMessage"
     )
     private static MutableText renderHud(MutableText winMessage) {
-        if (Jester.isJesterWin()) {
-            return Text.translatable("game.win.jester");
+        World world = MinecraftClient.getInstance().world;
+        if (world != null) {
+            JesterWorldComponent component = JesterWorldComponent.KEY.get(world);
+            if (component.isJesterWin()) {
+                return Text.translatable("game.win.jester");
+            }
         }
+
         return winMessage;
     }
 

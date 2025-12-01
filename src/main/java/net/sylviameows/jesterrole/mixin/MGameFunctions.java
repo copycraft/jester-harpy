@@ -8,6 +8,7 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 import net.sylviameows.jesterrole.Jester;
+import net.sylviameows.jesterrole.cca.JesterWorldComponent;
 import org.jetbrains.annotations.Nullable;
 import org.ladysnake.cca.api.v3.component.sync.AutoSyncedComponent;
 import org.ladysnake.cca.api.v3.component.tick.ClientTickingComponent;
@@ -28,8 +29,9 @@ public abstract class MGameFunctions implements AutoSyncedComponent, ServerTicki
 
     @Inject(method = "initializeGame", at = @At("HEAD"))
     private static void initializeGame(ServerWorld world, CallbackInfo ci) {
-        Jester.setJesterWin(false, world.getPlayers());
-        Jester.ENABLED = Math.random() > (1-Jester.CHANCE);
+        JesterWorldComponent component = JesterWorldComponent.KEY.get(world);
+
+        component.reset();
     }
 
     @Inject(
@@ -48,7 +50,9 @@ public abstract class MGameFunctions implements AutoSyncedComponent, ServerTicki
                 game.setLooseEndWinner(victim.getUuid());
                 GameRoundEndComponent.KEY.get(world).setRoundEndData(serverWorld.getPlayers(), GameFunctions.WinStatus.LOOSE_END);
 
-                Jester.setJesterWin(true, serverWorld.getPlayers());
+                JesterWorldComponent component = JesterWorldComponent.KEY.get(world);
+                component.setJesterWin(true);
+
                 GameFunctions.stopGame(serverWorld);
             }
         }

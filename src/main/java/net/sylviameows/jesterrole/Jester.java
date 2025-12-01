@@ -9,6 +9,9 @@ import dev.doctor4t.trainmurdermystery.game.GameConstants;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.networking.v1.*;
+import net.fabricmc.loader.api.SemanticVersion;
+import net.fabricmc.loader.api.Version;
+import net.fabricmc.loader.api.VersionParsingException;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -43,9 +46,6 @@ public class Jester implements ModInitializer {
         return Identifier.of(MOD_ID, name);
     }
 
-    public static boolean ENABLED = true;
-    public static double CHANCE = 1.0;
-
     public static final int ROLE_COLOR = 0xF8C8DC;
     public static Role ROLE = new Role(
             Jester.id("role"),
@@ -58,26 +58,11 @@ public class Jester implements ModInitializer {
     );
     public static RoleAnnouncementTexts.RoleAnnouncementText TEXT = new JesterAnnouncementText();
 
-    private static boolean JESTER_WIN = false;
-
-    public static boolean isJesterWin() {
-        return JESTER_WIN;
-    }
-
-    public static void setJesterWin(boolean jesterWin, @Nullable List<ServerPlayerEntity> players) {
-        if (players != null) {
-            players.forEach(player -> ServerPlayNetworking.send(player, new JesterWinPayload(jesterWin)));
-        }
-        JESTER_WIN = jesterWin;
-    }
-
     @Override
     public void onInitialize() {
         LOGGER.info("Attempting role injection.");
         TMMRoles.registerRole(ROLE);
         RoleAnnouncementTexts.registerRoleAnnouncementText(TEXT);
-
-        PayloadTypeRegistry.playS2C().register(JesterWinPayload.ID, JesterWinPayload.CODEC);
 
         ServerLoginConnectionEvents.QUERY_START.register(((handler, server, sender, synchronizer) -> {
             ServerLoginNetworking.registerReceiver(handler, CHANNEL, (_server, _handler, understood, buf, _synchronizer, responder) -> {
@@ -93,19 +78,37 @@ public class Jester implements ModInitializer {
                 }
 
                 String version = buf.readString();
+                try {
+                    Version oldestCompatible = SemanticVersion.parse("1.2.0");
+                    SemanticVersion clientVersion = SemanticVersion.parse(version);
+
+                    if (clientVersion.compareTo(oldestCompatible) < 0) {
+                        handler.disconnect(Text.literal("")
+                                .append(Text.literal("ᴏᴜᴛ ᴏꜰ ᴅᴀᴛᴇ").withColor(ROLE_COLOR).formatted(Formatting.BOLD))
+                                .append("\n\nThis server requires Jester Role version %s or higher!\nYou have version %s installed.\n\n".formatted(oldestCompatible.getFriendlyString(), version))
+                                .append(Text.literal("Find the update here:\n").formatted(Formatting.GRAY))
+                                .append(Text.literal("https://sylviameo.ws/projects/jester/").formatted(Formatting.UNDERLINE))
+                                .append(Text.literal("\n\n\n"))
+                        );
+                        return;
+                    }
+                } catch (VersionParsingException ignored) {
+
+                }
+
                 LOGGER.info("client joining with jester version {}", version);
+
 
                 _synchronizer.waitFor(CompletableFuture.completedFuture(null));
             });
 
             PacketByteBuf out = PacketByteBufs.create();
-            sender.sendPacket(CHANNEL, out.writeBoolean(isJesterWin()));
+            sender.sendPacket(CHANNEL, out.writeBoolean(true));
         }));
 
         CommandRegistrationCallback.EVENT.register(((dispatcher, registryAccess, environment) -> {
             RoleChanceCommand.register(dispatcher);
         }));
-
 
         Jester.LOGGER.info("Role successfully injected.");
     }

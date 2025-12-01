@@ -15,6 +15,7 @@ import net.minecraft.network.packet.CustomPayload;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.sylviameows.jesterrole.Jester;
+import net.sylviameows.jesterrole.cca.JesterWorldComponent;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -72,7 +73,8 @@ public class MMurderGameMode {
             )
     )
     private static void assignJester(@NotNull ServerWorld world, @NotNull List<ServerPlayerEntity> players, GameWorldComponent gameComponent, CallbackInfoReturnable<Integer> cir) {
-        if (!Jester.ENABLED) return;
+        JesterWorldComponent component = JesterWorldComponent.KEY.get(world);
+        if (!component.isEnabled()) return;
 
         List<ServerPlayerEntity> potentials = new ArrayList<>(players.stream().filter(player -> gameComponent.isRole(player, TMMRoles.CIVILIAN)).toList());
 
