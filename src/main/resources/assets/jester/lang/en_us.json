@@ -6,5 +6,7 @@
   "announcement.win.jester": "Jester wins!",
   "game.win.jester": "They successfully tricked the innocents!",
   "tip.lockpick.killer_only": "Only killers can jam doors.",
-  "tip.lockpick.not_sane": "You're not sane enough to pick this lock."
+  "tip.lockpick.not_sane": "You're not sane enough to pick this lock.",
+  "command.jester.rolechance.set": "Jester odds set to %s",
+  "command.jester.rolechance.missing_arg": "Missing chance argument."
 }

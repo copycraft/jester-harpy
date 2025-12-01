@@ -13,17 +13,23 @@ import org.ladysnake.cca.api.v3.component.sync.AutoSyncedComponent;
 import org.ladysnake.cca.api.v3.component.tick.ClientTickingComponent;
 import org.ladysnake.cca.api.v3.component.tick.ServerTickingComponent;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.util.Random;
+
 @Mixin(GameFunctions.class)
 public abstract class MGameFunctions implements AutoSyncedComponent, ServerTickingComponent, ClientTickingComponent {
 
+    @Unique
+    private static final Random RANDOM = new Random();
 
     @Inject(method = "initializeGame", at = @At("HEAD"))
     private static void initializeGame(ServerWorld world, CallbackInfo ci) {
         Jester.setJesterWin(false, world.getPlayers());
+        Jester.ENABLED = Math.random() > (1-Jester.CHANCE);
     }
 
     @Inject(

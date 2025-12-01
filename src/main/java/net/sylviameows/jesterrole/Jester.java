@@ -7,6 +7,7 @@ import dev.doctor4t.trainmurdermystery.cca.PlayerMoodComponent;
 import dev.doctor4t.trainmurdermystery.client.gui.RoleAnnouncementTexts;
 import dev.doctor4t.trainmurdermystery.game.GameConstants;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.networking.v1.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketByteBuf;
@@ -16,6 +17,7 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
+import net.sylviameows.jesterrole.commands.RoleChanceCommand;
 import net.sylviameows.jesterrole.mixin.MPlayerMoodAccessor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -42,6 +44,7 @@ public class Jester implements ModInitializer {
     }
 
     public static boolean ENABLED = true;
+    public static double CHANCE = 1.0;
 
     public static final int ROLE_COLOR = 0xF8C8DC;
     public static Role ROLE = new Role(
@@ -98,6 +101,11 @@ public class Jester implements ModInitializer {
             PacketByteBuf out = PacketByteBufs.create();
             sender.sendPacket(CHANNEL, out.writeBoolean(isJesterWin()));
         }));
+
+        CommandRegistrationCallback.EVENT.register(((dispatcher, registryAccess, environment) -> {
+            RoleChanceCommand.register(dispatcher);
+        }));
+
 
         Jester.LOGGER.info("Role successfully injected.");
     }
