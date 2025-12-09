@@ -1,0 +1,12 @@
+{
+  "announcement.role.jester": "Bufón!",
+  "announcement.title.jester": "Bufón",
+  "announcement.goal.jester": "Actúa de forma sospechosa para que un vigilante te elimine.",
+  "announcement.goals.jester": "Actúa de forma sospechosa para que un vigilante te elimine.",
+  "announcement.win.jester": "¡El bufón gana!",
+  "game.win.jester": "¡Engañaron con éxito a los inocentes!",
+  "tip.lockpick.killer_only": "Solo los asesinos pueden bloquear puertas.",
+  "tip.lockpick.not_sane": "No estás lo suficientemente cuerdo como para forzar esta cerradura.",
+  "command.jester.rolechance.set": "Probabilidad del bufón establecida a %s",
+  "command.jester.rolechance.missing_arg": "Falta el argumento de probabilidad."
+}
